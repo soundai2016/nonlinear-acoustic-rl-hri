@@ -8,21 +8,32 @@ This repository contains scripts and instructions for testing Azero acoustic mod
 ---------
 ### mix_with_noise.py
 + desc: Mixes a speech file with background and foreground noise to generate a synthesized audio file.
-+ run example：python mix_noise.py \
-        --clean_path xxx \
-        --background_noise_path xxx \
-        --foreground_noise_path xxx
++ run example：python mix_with_noise.py \
+        --clean_path xxx.pcm \
+        --background_noise_path xxx.pcm \
+        --foreground_noise_path xxx.pcm \
+        --output_file_path xxx
 
 ### get_gvep_result.py
 + desc: Invokes the Azero GVEP model API to process audio files and returns the enhanced output results.
-+ run example: python get_gvep_result.py 
-        --input_path xxx \
++ run example: python get_gvep_result.py \
+        --input_file xxx \
         --trim_duration 600 \
+        --output_file xxx
 + to get api token, visit: https://azero.soundai.com/#/voice?id=denoise
 
 ### get_test_result.py
 + desc: Analyzes and compares the GVEP model output with reference files to generate test evaluation results.
-+ run example: python get_test_result.py --gvep_path xxx --answer_path xxx
+        Ensure that the audio files are in the same format.
++ run example: python get_test_result.py \
+        --gvep_path xxx \
+        --answer_path xxx \
+        --output_file xxx.txt
+
+### PESQ MOS-LQO Quality Evaluation for Babble, Car, Street Noise
+<div align="left">
+  <img src="images/gvep-eval.png" width="500px"/>
+</div>
 
 ---------
 ## [2] azero-gtts-test - azerotts model test scripts
@@ -37,27 +48,60 @@ This repository contains scripts and instructions for testing Azero acoustic mod
 
 ### get test results via github repos blow:
 + MOS calculation  https://github.com/gabrielmittag/NISQA
-+ SIM-O calculation  https://github.com/microsoft/UniSpeech
-+ WER calculation https://github.com/facebookresearch/fairseq/tree/main/examples/hubert
++ SIM-O calculation  https://github.com/microsoft/UniSpeech/tree/main/downstreams/speaker_verification
++ Transcription of generated speech to calculate WER https://github.com/facebookresearch/fairseq/tree/main/examples/hubert
+
+### Results on the LibriSpeech test-clean set following NaturalSpeech 3
+<div align="left">
+  <img src="images/gtts-eval.png" width="500px"/>
+</div>
 
 ---------
 ## [3] azero-gasr-test - azeroasr model test scripts
 ---------
 ### get_gasr_result.py
 + desc: Invokes the Azero GASR model API to perform speech recognition and convert speech into text.
-+ run example：python get_gasr_result.py --file_path xxx
++ run example：python get_gasr_result.py --file_path xxx --language xxx
 + to get api token, visit: https://azero.soundai.com/#/voice?id=asr_one_sentence
 
 ### get_test_result.py
 + desc: Analyzes the GASR model output logs to generate test evaluation results and performance metrics.
-+ run example：python get_test_result.py --log_path xxx --language zh
++ run example：python get_test_result.py --log_file xxx --reference_file xxx
 
-## [4] Evaluation Methods
+### Performance comparison with mainstream ASR models
+<div align="left">
+  <img src="images/gasr-eval.png" width="500px"/>
+</div>
+
+---------
+## [4] AzeroGPT
+---------
+### Performance Scores of AzeroGPT across Diverse Evaluation Criteria
+
+| Evaluation  Name | Single Test Item | Score | Single Test Item  | Score | Ranking |
+| :--------------- | ---------------- | ----- | ----------------- | ----- | ------- |
+| Livebench        | Global Average   | 32.7  | Reasoning Average | 24.47 | 43      |
+|                  | IF Average       | 59.31 | average           | 32.7  |         |
+| MMLU-Pro         | Overall          | 63.07 | Health            | 66.5  | 54      |
+|                  | Biology          | 82.15 | History           | 66.93 |         |
+|                  | Business         | 66.67 | Law               | 45.87 |         |
+|                  | Chemistry        | 50.8  | Math              | 63.29 |         |
+|                  | Computer Science | 66.83 | Philosophy        | 62.12 |         |
+|                  | Economics        | 73.93 | Physics           | 57.51 |         |
+|                  | Engineering      | 48.28 | Psychology        | 75.06 |         |
+|                  | Other            | 65.91 | average           | 63.66 |         |
+| C-Eval           | Avg(Hard)        | 70.4  | Humanities        | 88.4  | 3       |
+|                  | STEM             | 82    | Others            | 90.4  |         |
+|                  | Social Science   | 92.9  | Avg               | 87.2  |         |
+| Livebenchcode_v5 | pass             | 12.1  | medium            | 5.4   | 32      |
+|                  | easy             | 43.1  | hard              | 0.1   |         |
+
+## [5] Evaluation Methods
 + MOS Calculation: [NISQA GitHub Repository](https://github.com/gabrielmittag/NISQA)
-+ SIM-O Calculation: [UniSpeech GitHub Repository](https://github.com/microsoft/UniSpeech)
-+ WER Calculation: [HuBERT GitHub Repository](https://github.com/microsoft/UniSpeech)
++ SIM-O Calculation: [UniSpeech GitHub Repository](https://github.com/microsoft/UniSpeech/tree/main/downstreams/speaker_verification)
++ Transcription of Generated Speech: [HuBERT GitHub Repository](https://github.com/facebookresearch/fairseq/tree/main/examples/hubert)
 
-## [5] Evaluation Dataset
+## [6] Evaluation Dataset
 
 - **LibriSpeech**: A 1,000-hour corpus of 16 kHz English read speech from audiobooks.  
   Download: [OpenSLR SLR12](https://www.openslr.org/12) :contentReference[oaicite:0]{index=0}

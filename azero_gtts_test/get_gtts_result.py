@@ -51,7 +51,8 @@ def query_character_name(speaker_name="20250416000002_test_en_123456"):
         response = requests.post(url, headers=headers, data=data)
         response.raise_for_status()
         result = response.json()
-        success = result.get("success", False)
+        print("result", result)
+        success = result.get("success")
         print(f"Success: {success}")
         return success # 返回 success 和完整结果
     except requests.RequestException as e:
@@ -65,7 +66,7 @@ def generate_tts_voice(
 ) -> bool:
     default_params = {
         # "speaker_name": "20250223182728_xiaoxiong_zh_123456",
-        "speaker_name": "20250415145558_qbnjfy_zh_573274",
+        "speakerName": "20250415145558_qbnjfy_zh_573274",
         "text": "Hello SoundAI, 我是声智科技的测试员, My name is 小易。声智科技を愛しています",
         "language": "auto",
         "emotion": "default",
@@ -116,7 +117,7 @@ def generate_tts_voice(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Upload and process an audio file.")
-    parser.add_argument("--file-path", type=str)
+    parser.add_argument("--file_path", type=str)
     parser.add_argument("--speaker_name", type=str)
     parser.add_argument("--text", type=str)
     args = parser.parse_args()
@@ -127,10 +128,11 @@ if __name__ == "__main__":
     text = args.text
 
     clone_voice(
-       file_path = file_path,
-        language = "en",
+        file_path = file_path,
+        language = "auto",
         speaker_name = speaker_name
     )
+    time.sleep(5)
     while True:
         result = query_character_name(
             speaker_name = speaker_name
@@ -144,7 +146,7 @@ if __name__ == "__main__":
     start_time = time.time()  # 记录开始时间
     generate_tts_voice(
         output_path = output_path,
-        speaker_name = speaker_name,
+        speakerName = speaker_name,
         text = text,
         format="wav",
         speed=1

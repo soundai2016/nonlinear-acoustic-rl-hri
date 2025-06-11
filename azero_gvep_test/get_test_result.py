@@ -3,6 +3,7 @@ import numpy as np
 from pydub import AudioSegment
 from pesq import pesq
 import math
+import argparse
 
 def calculate_mos_lqo(pesq_score):
     # 非线性公式，根据实际情况调整
@@ -46,11 +47,12 @@ def main(gvep_path, answer_path, output_file):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Get test result.")
-    parser.add_argument("--gvep_path", type=str, default="gvep_output/test.mp3", help="Path to the GVEP output file.")
-    parser.add_argument("--answer_path", type=str, default="mix_output/test.mp3", help="Path to the answer file.")
+    parser.add_argument("--answer_path", type=str, help="Path to the clean file.")
+    parser.add_argument("--gvep_path", type=str, help="Path to the gVEP output file.")
+    parser.add_argument("--output_file", type=str, help="Path to get the output result.")
     args = parser.parse_args()
 
-    gvep_path = args.gvep_path
     answer_path = args.answer_path
-    output_file = "/test_output/test_result.txt"  # 输出文件名
+    gvep_path = args.gvep_path
+    output_file=args.output_file
     main(gvep_path, answer_path, output_file)

@@ -69,16 +69,18 @@ def extract_segments(audio, segment_length=60000):
 
 def main():
 
-    parser = argparse.ArgumentParser(description="mix audio file with noise.")
-    parser.add_argument("--clean_path", type=str)
-    parser.add_argument("--background_noise_path", type=str)
-    parser.add_argument("--foreground_noise_path", type=str)
+    parser = argparse.ArgumentParser(description="mix audio file with noise and the output file.")
+    parser.add_argument("--clean_path", type=str, help="Path to the clean audio file.")
+    parser.add_argument("--background_noise_path", type=str, help="Path to the background noise audio file.")
+    parser.add_argument("--foreground_noise_path", type=str, help="Path to the foreground noise audio file.")
+    parser.add_argument("--output_file_path", type=str, help="Floder path where the output file will be saved.")
     args = parser.parse_args()
 
     #input_file
     clean_pcm_path = args.clean_path
     noise1_pcm_path = args.background_noise_path  #background noise, pcm
     noise2_pcm_path = args.foreground_noise_path  #foreground noise, pcm
+    output_dir = args.output_file_path 
 
     clean_audio = pcm_to_audiosegment(clean_pcm_path)
     noise1 = pcm_to_audiosegment(noise1_pcm_path)
@@ -97,7 +99,6 @@ def main():
     snr_levels = [-5,-3,0,3,5,10,15,20]
 
     #output_file
-    output_dir = "mix_output"
     os.makedirs(output_dir, exist_ok=True)
 
     clean_segments = extract_segments(clean_audio, segment_length=60000)

@@ -33,7 +33,7 @@ def get_gasr_result(file_path, language, denoise):
     with open(file_path, "rb") as f:
         files = {"file": f}
         data = {
-            "request": json.dumps({
+            "requestParam": json.dumps({
                 "language": language,
                 "hotwords": "{}",
                 "wav_name": "text",
@@ -41,17 +41,21 @@ def get_gasr_result(file_path, language, denoise):
             })
         }
         response = requests.post(url, files=files, data=data, headers=headers)
-    
+    print(response.text)
     if response.status_code == 200:
-        result = response.json()
-        if result.get("status") == "completed":
-            return {
-                "result": result['response']['text'],
-                "language": language
-            }
-        else:
-            print("Task failed:", result)
-            return None
+        return {
+            "result": response.text,
+            "language": language
+        }
+        # result = response.json()
+        # if result.get("status") == "completed":
+        #     return {
+        #         "result": result['response']['text'],
+        #         "language": language
+        #     }
+        # else:
+        #     print("Task failed:", result)
+        #     return None
     else:
         print("Task submission failed:", response.text)
         return None
